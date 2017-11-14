@@ -1,6 +1,13 @@
 package csce4444;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +25,7 @@ public class SwolePatrol {
 	// These are the components necessary for the application to function
 
 	@Autowired
-	private String dataCollector;
+	private EntryLookupEngine entryLookupEngine;
 
 	/**
 	 * This method is what runs when the application starts. Its purpose is to run
@@ -36,11 +43,16 @@ public class SwolePatrol {
 	@RequestMapping("/")
 	public String index(Map<String, Object> model) {
 		
-		 
+		// GET CURRENT TIME
 		
+		Date now = new Date();
+		Date fifteenMinutesAgo = Date.from((LocalDateTime.now()).minus(15, ChronoUnit.MINUTES).toInstant(ZoneOffset.of("CST")));
+		Integer entriesForDate = entryLookupEngine.get(new Date());
+		
+		///////////////////////////////////////////////////////////////
 		
 		// replace variables in the html file
-		model.put("swipes", "" + (Math.random() * 100));
+		model.put("swipes", "" + 42 /*entriesForDate*/);
 		return "index"; // this is the name of the html file to return
 	}
 

@@ -1,6 +1,8 @@
 package csce4444;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -42,8 +44,18 @@ public class EntryLookupEngine {
 	
 	
 	private HashMap<Date, Integer> initializeMap() {
-		// TODO FINISH THIS TONY
-		return null;
+		// TODO DO THIS IBRAHIM
+		
+		File file = new File("excelfile.whatever");
+		
+		HashMap<Date, Integer> map = new HashMap<Date, Integer>();
+		
+		Date date = new Date();
+		date.getDay();
+		date.getHours();
+		
+		
+		return map;
 	}
 	
 	
