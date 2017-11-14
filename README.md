@@ -9,3 +9,8 @@ Jacob "jeb" Hanson
 Ibrahim El-Rayes
 John Nguyen
 Anthony Hicks
+
+This is the directory structure for our repository:
+
+/src - The folder containing our project's source code.
+/doc - The folder containing the documentation for our project, including reports, presentations, and meeting minutes.
