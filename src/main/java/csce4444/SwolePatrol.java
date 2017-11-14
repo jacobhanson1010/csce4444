@@ -16,20 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SwolePatrol {
 
 	// These are the components necessary for the application to function
-	
-	@Autowired private UNTDataCollector dataCollector;
-	
-	// These are the request mappings for handling web requests. 
-	
-	@RequestMapping("/")
-	public String index(Map<String, Object> model) {
-		// replace variables in the html file
-		model.put("swipes", ""+(Math.random()*100));
-		return "index"; // this is the name of the html file to return
-	}
+
+	@Autowired
+	private String dataCollector;
 
 	/**
-	 * This method is what is run when the application starts. Its purpose is to run
+	 * This method is what runs when the application starts. Its purpose is to run
 	 * this class as a spring application.
 	 * 
 	 * @param args
@@ -37,6 +29,19 @@ public class SwolePatrol {
 	public static void main(String[] args) {
 		// Set this class as the Spring Controller
 		SpringApplication.run(SwolePatrol.class, args);
+	}
+
+	// These are the request mappings for handling web requests.
+
+	@RequestMapping("/")
+	public String index(Map<String, Object> model) {
+		
+		 
+		
+		
+		// replace variables in the html file
+		model.put("swipes", "" + (Math.random() * 100));
+		return "index"; // this is the name of the html file to return
 	}
 
 }
