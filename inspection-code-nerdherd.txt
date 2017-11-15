@@ -143,9 +143,9 @@ public class SwolePatrol {
 		///////////////////////////////////////////////////////////////
 		
 		// replace variables in the html file
-		model.put("swipes", "" + 42 /*entriesForDate*/);
+		model.put("swipes", "" + entriesForDate /*entriesForDate*/);
+		model.put("fifteenMinutesAgo", fifteenMinutesAgo);
 		return "index"; // this is the name of the html file to return
 	}
 
 }
-
