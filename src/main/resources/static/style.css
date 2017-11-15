@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			
+				div
+				{	
+				}
+				
+				/* format setting for h1 (which is time) */
+				h1
+				{
+					color: black;
+					text-align: center;
+					font-style: verdana;
+					background-color: lightgrey;
+					width: 400px;
+					border: 15px solid black;
+					padding: 25px;
+					margin: 25px auto;
+				}	
+				
+				/* temp div to hold where dynamic data will be --> */
+				div2 
+				{
+					color: red;	
+				}
+				
+				/*format settings for displaying number of gym goers */
+				p 
+				{
+					font-style: verdana;
+					text-align: center;
+					background-color: lightgrey;
+					width: 500px;
+					border: 10px solid black;
+					padding: 25px;
+					margin: 25px auto;
+					font-weight: bold;
+					font-size: 1.25em;
+				}
+				
+				
+				/* Style for the background */
+				body 
+				{
+					background-image: url("http://www.meangreenmap.com/images/weightroom/weightroom1.jpg");
+					 background-size: cover;
+					background-repeat: no-repeat;
+				}
+				
+				/* Style for displaying the current time */
+				.marquee 
+				{
+					box-sizing: border-box;
+					width: 460px;
+					margin: 0 auto;
+					background:lightgrey;
+					white-space: nowrap;
+					overflow: hidden;
+					color:blue;
+					font-size:18px;
+				}
+				
+				
+				
+				
+			</style>
+		</head>
+	</html>
