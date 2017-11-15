@@ -1,3 +1,4 @@
+EntryLookupEngine.java
 package csce4444;
 
 //import java.io.File;
@@ -71,11 +72,24 @@ public class EntryLookupEngine {
 			Iterator<Cell> cells = rows.next().cellIterator();
 			cell = (XSSFCell) cells.next();
 			Date date = new Date();
-			date.setDay(cell.getStringCellValue());
+			if (cell.getStringCellValue().equals("Sunday")
+				date.setDay(Calendar.SUNDAY);
+			if (cell.getStringCellValue().equals("Monday")
+				date.setDay(Calendar.MONDAY);
+			if (cell.getStringCellValue().equals("Tuesday")
+				date.setDay(Calendar.TUESDAY);
+			if (cell.getStringCellValue().equals("Wednesday")
+				date.setDay(Calendar.WEDNESDAY);
+			if (cell.getStringCellValue().equals("Thursday")
+				date.setDay(Calendar.THURSDAY);
+			if (cell.getStringCellValue().equals("Friday")
+				date.setDay(Calendar.FRIDAY);
+			if (cell.getStringCellValue().equals("Saturday")
+				date.setDay(Calendar.SATURDAY);
 			cell = (XSSFCell) cells.next();
-			date.setTime(cell.getStringCellValue());
+			date.setTime((new SimpleDateFormat("HH:mm").parse(cell.getStringCellValue()).getTime());
 			cell = (XSSFCell) cells.next();
-			Integer value = (cell.getStringCellValue());
+			Integer value = Integer.parseInt(cell.getStringCellValue());
 			entryLookupMap.put(date, value);
 		}
 				
@@ -89,6 +103,7 @@ public class EntryLookupEngine {
 	}	
 }
 
+SwolePatrol.java
 package csce4444;
 
 import java.sql.Time;
@@ -144,8 +159,142 @@ public class SwolePatrol {
 		
 		// replace variables in the html file
 		model.put("swipes", "" + entriesForDate /*entriesForDate*/);
-		model.put("fifteenMinutesAgo", fifteenMinutesAgo);
+		model.put("currentTime", now.toString());
 		return "index"; // this is the name of the html file to return
 	}
 
 }
+
+style.css
+div
+{	
+}
+
+/* format setting for h1 (which is time) */
+h1
+{
+	color: black;
+	text-align: center;
+	font-style: verdana;
+	background-color: lightgrey;
+	width: 400px;
+	border: 15px solid black;
+	padding: 25px;
+	margin: 25px auto;
+}	
+
+/* temp div to hold where dynamic data will be --> */
+div2 
+{
+	color: red;	
+}
+
+/*format settings for displaying number of gym goers */
+p 
+{
+	font-style: verdana;
+	text-align: center;
+	background-color: lightgrey;
+	width: 500px;
+	border: 10px solid black;
+	padding: 25px;
+	margin: 25px auto;
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+
+/* Style for the background */
+body 
+{
+	background-image: url("http://www.meangreenmap.com/images/weightroom/weightroom1.jpg");
+	 background-size: cover;
+	background-repeat: no-repeat;
+}
+
+/* Style for displaying the current time */
+.marquee 
+{
+	box-sizing: border-box;
+	width: 460px;
+	margin: 0 auto;
+	background:lightgrey;
+	white-space: nowrap;
+	overflow: hidden;
+	color:blue;
+	font-size:18px;
+}
+
+index.html
+<!DOCTYPE html>	
+
+<html>
+	<!-- header has the link to the CSS file -->
+	<head>
+		<link rel="stylesheet" th:href="@{/style.css}"
+			href="../../style.css" />
+	</head>
+
+
+	<body>
+	
+		<!-- current time section-->
+		<h1>
+			<div> Current Time: </div>
+			<div2 th:text="${currentTime}"></div2>
+			
+			<!-- NOTE: The command below this line will display time when java is connected -->
+			<!-- <p class="marquee"><span id="dtText"></span></p> -->
+			
+				
+				<!-- NOTE: The two lines of code below this line will go into java to pull the current time -->
+				<!-- var today = new Date(); -->
+				<!-- document.getElementById('dtText').innerHTML=today; -->
+		</h1>
+		
+		
+		
+		<!-- display data section -->
+		<p> 
+		
+			<div3>Average number of gym members in the last 15 minutes:</div3>
+			<div2 th:text="${swipes}"></div2>
+
+		</p>
+		
+	</body>
+	
+	
+</html>
+
+pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.7.RELEASE</version>
+	</parent>
+	<groupId>com.csce4444.nerdherd</groupId>
+	<artifactId>swolepatrol</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Swole Patrol</name>
+	<description>Swole Patrol is a webapp designed to report metric about the capacity of the UNT Pohl Recreation Center</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+	</dependencies>
+</project>
