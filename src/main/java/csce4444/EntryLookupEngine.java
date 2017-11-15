@@ -1,8 +1,8 @@
 package csce4444;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
+//import java.io.File;
+//import java.util.ArrayList;
+//import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -10,6 +10,12 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileInputStream;
 /**
  * This component's purpose is to do whatever is necessary to retrieve the most up-to-date swipe data from
  * the Pohl Recreation Center, and return it.
@@ -45,18 +51,43 @@ public class EntryLookupEngine {
 	
 	private HashMap<Date, Integer> initializeMap() {
 		// TODO DO THIS IBRAHIM
+
 		
 		File file = new File("excelfile.whatever");
+			file = new FileInputStream("C:/eclipse/Book1.xlsx");
+		}
 		
 		HashMap<Date, Integer> map = new HashMap<Date, Integer>();
+		}
 		
-		Date date = new Date();
-		date.getDay();
-		date.getHours();
+		XSSFSheet sheet = wb.getSheetAt(0);
+		XSSFRow row = null;
+		XSSFCell cell = null;
 		
+		Iterator rows = sheet.rowIterator();
 		
+		while (rows.hasNext()){
+			Iterator cells = row.cellIterator();
+			while (cells.hasNext()){
+				
+				if (cell.getCellType() == XSSFCell.CELL_TYPE_DATE) {
+					// Not sure how to add to hashmap here
+				}
+				else if (cell.getCellType() == XSSF.CELL_TYPE_NUMERIC) {
+					// Not sure how to add to hashmap here
+				}
+				cell = (XSSFCell) cells.next();
+			}
+			
+			row = (XSSFRow) rows.next();
+		}
+				
+		try {
+			file.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return map;
-	}
-	
-	
+	}	
 }
