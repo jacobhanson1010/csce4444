@@ -5,17 +5,21 @@ package csce4444;
 //import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 /**
  * This component's purpose is to do whatever is necessary to retrieve the most up-to-date swipe data from
  * the Pohl Recreation Center, and return it.
@@ -49,37 +53,30 @@ public class EntryLookupEngine {
 	
 	
 	
-	private HashMap<Date, Integer> initializeMap() {
+	private HashMap<Date, Integer> initializeMap() throws IOException {
 		// TODO DO THIS IBRAHIM
 
-		
-		File file = new File("excelfile.whatever");
-			file = new FileInputStream("C:/eclipse/Book1.xlsx");
-		}
+		FileInputStream file = new FileInputStream("C:/eclipse/Book1.xlsx");
 		
 		HashMap<Date, Integer> map = new HashMap<Date, Integer>();
-		}
 		
+		XSSFWorkbook wb = new XSSFWorkbook(file);
 		XSSFSheet sheet = wb.getSheetAt(0);
 		XSSFRow row = null;
 		XSSFCell cell = null;
 		
-		Iterator rows = sheet.rowIterator();
+		Iterator<Row> rows = sheet.rowIterator();
 		
 		while (rows.hasNext()){
-			Iterator cells = row.cellIterator();
-			while (cells.hasNext()){
-				
-				if (cell.getCellType() == XSSFCell.CELL_TYPE_DATE) {
-					// Not sure how to add to hashmap here
-				}
-				else if (cell.getCellType() == XSSF.CELL_TYPE_NUMERIC) {
-					// Not sure how to add to hashmap here
-				}
-				cell = (XSSFCell) cells.next();
-			}
-			
-			row = (XSSFRow) rows.next();
+			Iterator<Cell> cells = rows.next().cellIterator();
+			cell = (XSSFCell) cells.next();
+			Date date = new Date();
+			date.setDay(cell.getStringCellValue());
+			cell = (XSSFCell) cells.next();
+			date.setTime(cell.getStringCellValue());
+			cell = (XSSFCell) cells.next();
+			Integer value = (cell.getStringCellValue());
+			entryLookupMap.put(date, value);
 		}
 				
 		try {
