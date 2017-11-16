@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -46,14 +47,14 @@ public class SwolePatrol {
 		// GET CURRENT TIME
 		
 		Date now = new Date();
-		Date fifteenMinutesAgo = Date.from((LocalDateTime.now()).minus(15, ChronoUnit.MINUTES).toInstant(ZoneOffset.of("CST")));
-		Integer entriesForDate = entryLookupEngine.get(new Date());
+		
+		Integer entriesForDate = entryLookupEngine.get(now);
 		
 		///////////////////////////////////////////////////////////////
 		
 		// replace variables in the html file
-		model.put("swipes", "" + entriesForDate /*entriesForDate*/);
-		model.put("fifteenMinutesAgo", fifteenMinutesAgo);
+		model.put("entries", "" + entriesForDate /*entriesForDate*/);
+		model.put("time", now.toString());
 		return "index"; // this is the name of the html file to return
 	}
 
