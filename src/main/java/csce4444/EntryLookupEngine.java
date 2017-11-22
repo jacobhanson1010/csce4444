@@ -62,9 +62,10 @@ public class EntryLookupEngine {
         key.set(Calendar.MINUTE, lookup.get(Calendar.MINUTE));
         
         int unroundedMinutes = key.get(Calendar.MINUTE);
-        int mod = unroundedMinutes % 5;
+        int mod = unroundedMinutes % 15;
         key.add(Calendar.MINUTE, unroundedMinutes == 0 ? -15 : -mod);
         key.set(Calendar.SECOND, 0);
+        System.out.println(key.getTime().toString() + " was the rounded time for the request.");
 		return entryLookupMap.get(key.getTime());
 	}
 	
