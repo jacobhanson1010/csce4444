@@ -73,7 +73,7 @@ public class EntryLookupEngine {
 	private HashMap<Date, Integer> initializeMap() throws IOException, ParseException {
 		// TODO DO THIS IBRAHIM
 
-		FileInputStream file = new FileInputStream("E:/Book1.xlsx");
+		FileInputStream file = new FileInputStream("Book1.xlsx");
 		
 		HashMap<Date, Integer> map = new HashMap<Date, Integer>();
 		
