@@ -18,11 +18,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import ch.qos.logback.classic.spi.LoggerRemoteView;
+
+import org.apache.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 /**
  * This component's purpose is to do whatever is necessary to retrieve the most up-to-date swipe data from
  * the Pohl Recreation Center, and return it.
@@ -31,6 +33,7 @@ import java.text.SimpleDateFormat;
  */
 @Component
 public class EntryLookupEngine {
+	private Logger logger = Logger.getLogger(this.getClass());
 	
 	private HashMap<Date, Integer> entryLookupMap;
 	
@@ -63,9 +66,9 @@ public class EntryLookupEngine {
         
         int unroundedMinutes = key.get(Calendar.MINUTE);
         int mod = unroundedMinutes % 15;
-        key.add(Calendar.MINUTE, unroundedMinutes == 0 ? -15 : -mod);
+        key.add(Calendar.MINUTE, mod == 0 ? -15 : -mod);
         key.set(Calendar.SECOND, 0);
-        System.out.println(key.getTime().toString() + " was the rounded time for the request.");
+        logger.info(key.getTime().toString() + " was the rounded time for the request.");
 		return entryLookupMap.get(key.getTime());
 	}
 	
