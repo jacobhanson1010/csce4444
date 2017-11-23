@@ -1,14 +1,9 @@
 package csce4444;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.Calendar;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -48,13 +43,17 @@ public class SwolePatrol {
 		
 		Date now = new Date();
 		
-		Integer entriesForDate = entryLookupEngine.get(now);
+		try {
+			Double entriesForDate = entryLookupEngine.get(now);
+			model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
+		} catch (NoSuchElementException e) {
+			model.put("entries", "Sorry, no data is available for this time.");
+		}
 		
 		///////////////////////////////////////////////////////////////
 		
-		// replace variables in the html file
-		model.put("entries", "" + entriesForDate /*entriesForDate*/);
 		model.put("time", now.toString());
+		
 		return "index"; // this is the name of the html file to return
 	}
 
