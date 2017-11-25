@@ -1,0 +1,83 @@
+Sub Test1()
+      Dim x As Integer
+      Dim colDay As String
+      Application.ScreenUpdating = False
+      ' Set numrows = number of rows of data.
+      NumRows = Range("B2", Range("B2").End(xlDown)).Rows.Count
+      ' Select cell a1.
+      Range("B2").Select
+      ' Establish "For" loop to loop "numrows" number of times.
+      For x = 1 To NumRows
+          If InStr(1, Format(ActiveCell.Value, "dddd"), "Mon") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Monday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+          
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Tue") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Tuesday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Wed") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Wednesday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+          
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Thu") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Thursday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+
+
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Fri") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Friday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+
+          
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Sat") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Saturday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+
+          ElseIf InStr(1, Format(ActiveCell.Value, "dddd"), "Sun") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            colDay = "Sunday"
+            ActiveCell.Offset(-1, 0).Select
+            ActiveCell.Offset(0, -1).Value = colDay
+            ActiveCell.Offset(1, 0).Select
+
+          ElseIf InStr(1, ActiveCell.Value, "2016") > 0 Then
+            ActiveCell.Offset(1, 0).Select
+            Rows(ActiveCell.Offset(-1, 0).Row).Delete
+            ActiveCell.Offset(-1, 0).Select
+
+          ElseIf IsEmpty(ActiveCell.Value) = True Then
+            Exit For
+          Else
+              ActiveCell.Offset(0, -1).Value = colDay
+              ' Selects cell down 1 row from active cell.
+              ActiveCell.Offset(1, 0).Select
+          End If
+      Next
+      Application.ScreenUpdating = True
+End Sub
