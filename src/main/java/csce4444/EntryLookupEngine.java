@@ -39,16 +39,9 @@ public class EntryLookupEngine {
 	
 	/**
 	 * This constructor is automatically called when the application starts up.
-	 * It's job is to initialize the model with the provided training data 
+	 * It's job is to initialize the model with the provided training data. 
 	 * @throws Exception 
 	 */
-	/******************************************************************* 
-	* Function     : EntryLookupEngine                                 *
-	* Parameter(s) : N/A											   *
-	* Return-Value : N/A									           *
-	* Description  : Initializes Instance of training data when the    *
-	* 				 server is started up							   *
-	********************************************************************/
 	@Autowired
 	public EntryLookupEngine() throws Exception {
 		// Convert the CSV file to ARFF format
@@ -58,12 +51,11 @@ public class EntryLookupEngine {
 		train = createInstance("data/training_data.arff");
 	}
 	
-	/******************************************************************* 
-	* Function     : evaluateModel                                     *
-	* Parameter(s) : N/A									           *
-	* Return-Value : Number of entrances predicted by model            *
-	* Description  : Tests classifier on test data, returns prediction *
-	********************************************************************/
+	/**
+	 * Tests classifier on test data, returns prediction
+	 * @return Number of entrances predicted by model
+	 * @throws Exception
+	 */
 	public int testModel() throws Exception {
 		int entrances;
 		
@@ -80,13 +72,12 @@ public class EntryLookupEngine {
 		return entrances;
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : getResult                                         *
-	* Parameter(s) : Classifier used on training set, testing set inst *
-	* Return-Value : Number of entrances in the past 15 minutes        *
-	* Description  : Gets prediction value from model                  *
-	********************************************************************/
+	/**
+	 * Gets prediction value from model.
+	 * @param model Classifier used on training set, testing set inst
+	 * @return int Number of entrances in the past 15 minutes
+	 * @throws Exception
+	 */
 	private int getResult(Classifier model) throws Exception {
 		double[] prediction = new double[test.numInstances()];
 
@@ -99,15 +90,13 @@ public class EntryLookupEngine {
 		return (int) prediction[0];
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : classify                                          *
-	* Parameter(s) : Classifier to be used on training set             *
-	* Return-Value : N/A                                               *
-	* Description  : Builds the classifier on the training data and    *
-	* 				 predicts desired values on test data              *
-	********************************************************************/
+	/**
+	 * Builds the classifier on the training data and predicts desired values on test data.
+	 * @param model Classifier to be used on training set
+	 * @throws Exception
+	 */
 	private void classify(Classifier model) throws Exception {
+		
 		Evaluation evaluation = new Evaluation(train);
 		
 		model.buildClassifier(train);
@@ -115,13 +104,11 @@ public class EntryLookupEngine {
 	}
 	
 	
-	/******************************************************************* 
-	* Function     : createTestFile                                    *
-	* Parameter(s) : Date object to append to testing file	           *
-	* Return-Value : N/A									           *
-	* Description  : Creates test file based off of arff template and  *
-	* 				 appends date instance to test file			       *
-	********************************************************************/
+	/**
+	 * Creates test file based off of arff template and appends date instance to test file.
+	 * @param date object to append to testing file
+	 * @throws IOException
+	 */
 	public void createTestFile(Date date) throws IOException {
 		
 		String outputString;
@@ -150,15 +137,12 @@ public class EntryLookupEngine {
 		// Close output buffer
 		writer.close();
 	}
-	
-	
-	/******************************************************************* 
-	* Function     : formatOutputString                                *
-	* Parameter(s) : Date object used to format test file              *
-	* Return-Value : String containing formatted date for arff file    *
-	* Description  : Formats date object to be compatible with arff    *
-	* 				 file format       								   *
-	********************************************************************/
+
+	/**
+	 * Formats date object to be compatible with arff file format.
+	 * @param date object used to format test file
+	 * @return String containing formatted date for arff file
+	 */
 	private String formatOutputString(Date date) {
 		
 		int mod, numMinutes;
@@ -207,13 +191,12 @@ public class EntryLookupEngine {
 		return result;
 	}
 	
-
-	/******************************************************************* 
-	* Function     : createInstance                                    *
-	* Parameter(s) : Name of the file to create the instance from      *
-	* Return-Value : Instances obj of the data read from file          *
-	* Description  : Reads from arff file and creates an Instances obj *
-	********************************************************************/
+	/**
+	 * Reads from arff file and creates an Instances obj.
+	 * @param filename Name of the file to create the instance from
+	 * @return Instances obj of the data read from file
+	 * @throws IOException
+	 */
 	private Instances createInstance(String filename) throws IOException {
 		BufferedReader datafile = readDataFile(filename);
 		
@@ -227,13 +210,12 @@ public class EntryLookupEngine {
 		return inst;
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : copyFileUsingStream                               *
-	* Parameter(s) : Source file and destination file		           *
-	* Return-Value : N/A									           *
-	* Description  : Helper method that copies one file to another     *
-	********************************************************************/
+	/**
+	 * Helper method that copies one file to another
+	 * @param source Source file 
+	 * @param dest destination file
+	 * @throws IOException
+	 */
 	private static void copyFileUsingStream(File source, File dest) throws IOException {
 		
 		// I/O Streams
@@ -255,13 +237,12 @@ public class EntryLookupEngine {
 	    }
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : CSV_to_ARFF		                               *
-	* Parameter(s) : Source file and destination file		           *
-	* Return-Value : N/A									           *
-	* Description  : Helper method that converts a CSV to an ARFF      *
-	********************************************************************/
+	/**
+	 * Helper method that converts a CSV to an ARFF.
+	 * @param src Source file 
+	 * @param dest destination file
+	 * @throws IOException
+	 */
 	private static void CSV_to_ARFF(String src, String dest) throws IOException{
 		CSVLoader loader = new CSVLoader();
 		
@@ -276,13 +257,11 @@ public class EntryLookupEngine {
 		saver.writeBatch();
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : readDataFile                                      *
-	* Parameter(s) : Name of the file to attach the reader to          *
-	* Return-Value : BufferedReader to read from file                  *
-	* Description  : Helper method for reading files                   *
-	********************************************************************/
+	/**
+	 * Helper method for reading files
+	 * @param filename Name of the file to attach the reader to
+	 * @return BufferedReader to read from file
+	 */
 	private BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
 		
@@ -295,61 +274,51 @@ public class EntryLookupEngine {
 		return inputReader;
 	}
 
-	
-	/******************************************************************* 
-	* Function     : getMonthFromDate                                  *
-	* Parameter(s) : Date object to parse month from		           *
-	* Return-Value : String containing month in "MMM" format           *
-	* Description  : Helper method to obtain snippet of the date       *
-	********************************************************************/
+	/**
+	 *  Helper method to obtain snippet of the date
+	 * @param date Date object to parse month from
+	 * @return String containing month in "MMM" format
+	 */
 	private String getMonthFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("MMM");
 		return format.format(date);
 	}
-	
-	
-	/******************************************************************* 
-	* Function     : getDayOfWeekFromDate                              *
-	* Parameter(s) : Date object to parse day from   		           *
-	* Return-Value : String containing day in "EEEE" format            *
-	* Description  : Helper method to obtain snippet of the date       *
-	********************************************************************/
+
+	/**
+	 * Helper method to obtain snippet of the date
+	 * @param date Date object to parse day from
+	 * @return String containing day in "EEEE" format
+	 */
 	private String getDayOfWeekFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("EEEE");
 		return format.format(date);
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : getHourFromDate                                   *
-	* Parameter(s) : Date object to parse hour from		               *
-	* Return-Value : String containing hour in "hh" format             *
-	* Description  : Helper method to obtain snippet of the date       *
-	********************************************************************/
+	/**
+	 * Helper method to obtain snippet of the date
+	 * @param date Date object to parse hour from
+	 * @return String containing hour in "hh" format
+	 */
 	private String getHourFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("hh");
 		return format.format(date);
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : getMinutesFromDate                                *
-	* Parameter(s) : Date object to parse minutes from		           *
-	* Return-Value : String containing minutes in "mm" format          *
-	* Description  : Helper method to obtain snippet of the date       *
-	********************************************************************/
+	/**
+	 * Helper method to obtain snippet of the date
+	 * @param date Date object to parse minutes from
+	 * @return String containing minutes in "mm" format
+	 */
 	private String getMinutesFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("mm");
 		return format.format(date);
 	}
 	
-	
-	/******************************************************************* 
-	* Function     : getMeridiemFromDate                               *
-	* Parameter(s) : Date object to parse meridiem(AM/PM) from	       *
-	* Return-Value : String containing meridiem in "aa" format         *
-	* Description  : Helper method to obtain snippet of the date       *
-	********************************************************************/
+	/**
+	 * Helper method to obtain snippet of the date
+	 * @param date Date object to parse meridiem(AM/PM) from
+	 * @return String containing meridiem in "aa" format
+	 */
 	private String getMeridiemFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("aa");
 		return format.format(date);
