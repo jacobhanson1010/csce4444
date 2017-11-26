@@ -20,10 +20,14 @@ import org.springframework.stereotype.Component;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -43,6 +47,8 @@ import weka.classifiers.rules.DecisionTable;
 public class EntryLookupEngine {
 	private Logger logger = Logger.getLogger(this.getClass());
 	private LinkedHashMap<Date, Double> entryLookupMap;
+	private Instances train;
+	private Instances test;
 	
 	/**
 	 * This constructor is automatically called when the application starts up.
@@ -51,6 +57,8 @@ public class EntryLookupEngine {
 	 */
 	@Autowired
 	public EntryLookupEngine() throws Exception {
+		//This should only build the model from the training file, nothing more
+		//We will have other functions for requesting/building test file
 		initializeWekaModel();
 		//entryLookupMap = initializeMap();
 	}
@@ -115,29 +123,70 @@ public class EntryLookupEngine {
 		return inputReader;
 	}
 	
+	private Instances createInstance(String path) throws IOException {
+		BufferedReader datafile = readDataFile(path);
+		
+		Instances inst = new Instances(datafile);
+		inst.setClassIndex(inst.numAttributes() - 1);
+		
+		datafile.close();
+		
+		return inst;
+	}
+	
+	public void createTestFile(Date date) throws IOException {
+		
+		File source = new File("data/template.arff");
+		File destination = new File("data/test.arff");
+		
+		// Remove any old test files
+		destination.delete();
+		
+		// Create the new test file
+		destination.createNewFile();
+		
+		// Copy the template to the test file
+		copyFileUsingStream(source, destination);
+	}
+	
+	private static void copyFileUsingStream(File source, File dest) throws IOException {
+		InputStream is = null;
+	    OutputStream os = null;
+	    try {
+	        is = new FileInputStream(source);
+	        os = new FileOutputStream(dest);
+	        byte[] buffer = new byte[1024];
+	        int length;
+	        while ((length = is.read(buffer)) > 0) {
+	            os.write(buffer, 0, length);
+	        }
+	    } finally {
+	        is.close();
+	        os.close();
+	    }
+	}
+	
 	private void initializeWekaModel() throws Exception {
-		System.out.println("Starting initializeWekaModel");
+		System.out.println("Initializing model...");
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		
-		BufferedReader datafile = readDataFile("data/Alldata_converted.arff");
-		Instances train = new Instances(datafile);
-		train.setClassIndex(train.numAttributes() - 1);
+		//Date now = new Date();
+		//createTestFile(now);
 		
-		datafile = readDataFile("data/test_data.arff");
-		Instances test = new Instances(datafile);
-		test.setClassIndex(test.numAttributes() - 1);
-
-		datafile.close();
+		train = createInstance("data/Alldata_converted.arff");
+		test = createInstance("data/test_data.arff");
+		
 		// The test data needs to be pulled from the site, this is just to make sure it works
 		
 		Classifier model = new DecisionTable();
 		Evaluation result = classify(model, train, test);
 		
 		printResults(model, test);
+		
+		//return result;
 	}
 	
 	private LinkedHashMap<Date, Double> initializeMap() throws IOException, ParseException {
-		// TODO DO THIS IBRAHIM
 
 		FileInputStream file = new FileInputStream("FacilityAccessEntranceExitStatisticsReportSpring2017.xlsx");
 

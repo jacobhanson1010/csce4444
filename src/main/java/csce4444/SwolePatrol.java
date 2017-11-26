@@ -1,5 +1,6 @@
 package csce4444;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
@@ -36,15 +37,20 @@ public class SwolePatrol {
 
 	// These are the request mappings for handling web requests.
 
-	//@RequestMapping("/")
-	//public String index(Map<String, Object> model) {
-		
+	@RequestMapping("/")
+	public String index(Map<String, Object> model) throws IOException {
+		// NEED TO MAKE A TEST FILE IN ARFF BASED ON CURRENT DATE
+		// THEN EVALUATE MODEL ON TEST FILE
+		// THEN RETURN PREDICTION TO HTML RESPONSE
 		// GET CURRENT TIME
 		
-		//Date now = new Date();
+		Date now = new Date();
+		
+		entryLookupEngine.createTestFile(now);
+		System.out.println("now= " + now);
 		
 		//try {
-//			Double entriesForDate = entryLookupEngine.get(now);
+		//Double entriesForDate = entryLookupEngine.get(now);
 			//model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
 		//} catch (NoSuchElementException e) {
 //			model.put("entries", "Sorry, no data is available for this time.");
@@ -53,7 +59,7 @@ public class SwolePatrol {
 		
 		//model.put("time", now.toString());
 		
-//		return "index"; // this is the name of the html file to return
-	
+		return "index"; // this is the name of the html file to return
+	}
 
 }
