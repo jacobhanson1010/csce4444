@@ -36,25 +36,24 @@ public class SwolePatrol {
 
 	// These are the request mappings for handling web requests.
 
-	@RequestMapping("/")
-	public String index(Map<String, Object> model) {
+	//@RequestMapping("/")
+	//public String index(Map<String, Object> model) {
 		
 		// GET CURRENT TIME
 		
-		Date now = new Date();
+		//Date now = new Date();
 		
-		try {
-			Double entriesForDate = entryLookupEngine.get(now);
-			model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
-		} catch (NoSuchElementException e) {
-			model.put("entries", "Sorry, no data is available for this time.");
-		}
+		//try {
+//			Double entriesForDate = entryLookupEngine.get(now);
+			//model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
+		//} catch (NoSuchElementException e) {
+//			model.put("entries", "Sorry, no data is available for this time.");
+		//}
 		
-		///////////////////////////////////////////////////////////////
 		
-		model.put("time", now.toString());
+		//model.put("time", now.toString());
 		
-		return "index"; // this is the name of the html file to return
-	}
+//		return "index"; // this is the name of the html file to return
+	
 
 }

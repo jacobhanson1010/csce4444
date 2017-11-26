@@ -19,10 +19,20 @@ import org.springframework.stereotype.Component;
 
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.output.prediction.PlainText;
+import weka.classifiers.rules.DecisionTable;
 /**
  * This component's purpose is to do whatever is necessary to retrieve the most up-to-date swipe data from
  * the Pohl Recreation Center, and return it.
@@ -32,18 +42,17 @@ import java.text.SimpleDateFormat;
 @Component
 public class EntryLookupEngine {
 	private Logger logger = Logger.getLogger(this.getClass());
-	
 	private LinkedHashMap<Date, Double> entryLookupMap;
 	
 	/**
 	 * This constructor is automatically called when the application starts up.
 	 * It's job is to initialize the map that contains the entry lookup data. 
-	 * @throws ParseException 
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
 	@Autowired
-	public EntryLookupEngine() throws IOException, ParseException {
-		entryLookupMap = initializeMap();
+	public EntryLookupEngine() throws Exception {
+		initializeWekaModel();
+		//entryLookupMap = initializeMap();
 	}
 
 	
@@ -70,7 +79,62 @@ public class EntryLookupEngine {
 		return entryLookupMap.get(key.getTime());
 	}
 	
+	public static void printResults(Classifier model, Instances testingSet) throws Exception {
+		// 2 is the instance in the testing set that we are predicting
+		double[][] prediction = new double[testingSet.numInstances()][];
+		for(int i = 0; i < testingSet.numInstances(); i++) {
+			prediction[i] = model.distributionForInstance(testingSet.get(i));
+		}
+		//double[] prediction = model.distributionForInstance(testingSet.get(2));
+		System.out.println("Probability of class " + testingSet.classAttribute().name() + " : ");
+		for(int i = 0; i < prediction.length; i++) {
+			for(int j = 0; j < prediction[i].length; j++) {
+				System.out.println("Instance[" + i + "] = " + testingSet.instance(i).stringValue(0) + " " + testingSet.instance(i).stringValue(1) + " " + testingSet.instance(i).stringValue(2) + " " + Double.toString(prediction[i][j]));
+			}
+		}
+	}
 	
+	public static Evaluation classify(Classifier model, Instances trainingSet, Instances testingSet) throws Exception {
+		Evaluation evaluation = new Evaluation(trainingSet);
+		
+		model.buildClassifier(trainingSet);
+		evaluation.evaluateModel(model, testingSet);
+
+		return evaluation;
+	}
+	
+	public static BufferedReader readDataFile(String filename) {
+		BufferedReader inputReader = null;
+		
+		try {
+			inputReader = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException ex) {
+			System.err.println("File not found: " + filename);
+		}
+		
+		return inputReader;
+	}
+	
+	private void initializeWekaModel() throws Exception {
+		System.out.println("Starting initializeWekaModel");
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		
+		BufferedReader datafile = readDataFile("data/Alldata_converted.arff");
+		Instances train = new Instances(datafile);
+		train.setClassIndex(train.numAttributes() - 1);
+		
+		datafile = readDataFile("data/test_data.arff");
+		Instances test = new Instances(datafile);
+		test.setClassIndex(test.numAttributes() - 1);
+
+		datafile.close();
+		// The test data needs to be pulled from the site, this is just to make sure it works
+		
+		Classifier model = new DecisionTable();
+		Evaluation result = classify(model, train, test);
+		
+		printResults(model, test);
+	}
 	
 	private LinkedHashMap<Date, Double> initializeMap() throws IOException, ParseException {
 		// TODO DO THIS IBRAHIM
