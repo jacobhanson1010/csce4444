@@ -1,5 +1,6 @@
 package csce4444;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,8 +33,6 @@ public class SwolePatrol {
 		SpringApplication.run(SwolePatrol.class, args);
 	}
 
-	// These are the request mappings for handling web requests.
-
 	@RequestMapping("/")
 	public String index(Map<String, Object> model) throws Exception {
 		int entrances;
@@ -42,11 +41,17 @@ public class SwolePatrol {
 		
 		entryLookupEngine.createTestFile(now);
 		
-		entrances = entryLookupEngine.evaluateModel();
+		try {
+			entrances = entryLookupEngine.testModel();
+			model.put("entries", entrances);		
+		} 
+		catch (IOException e) {
+			System.err.println("IOException" + e.getMessage());
+			model.put("entries", "Sorry, no data is available for this time period.");
+		}	
 		
-		model.put("entries", entrances);		
 		model.put("time", now.toString());
 		
-		return "index"; // this is the name of the html file to return
+		return "index";
 	}
 }
