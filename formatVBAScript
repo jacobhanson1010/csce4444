@@ -1,84 +1,8 @@
-Function IsWorkBookOpen(Name As String) As Boolean
-  Dim xWb As Workbook
-  On Error Resume Next
-  Set xWb = Application.Workbooks.Item(Name)
-  IsWorkBookOpen = (Not xWb Is Nothing)
-End Function
-
-Sub SaveAsCSV()
-  Dim parts As Variant
-  parts = Split(ActiveWorkbook.Name, ".")
-  parts(UBound(parts)) = "csv"
-
-  ActiveWorkbook.SaveAs Filename:=ActiveWorkbook.Path & "\" & _
-    Join(parts, "."), FileFormat:=xlCSV, CreateBackup:=False
-End Sub
-
-Sub ConsolidateData()
-  Dim wbSrc As Workbook
-  Dim wsSrc As Worksheet
-  Dim wbDst As Workbook
-  Dim myPath As String
-  Dim myFile As String
-  Dim myExtension As String
-
-  'Optimize Macro Speed
-    Application.ScreenUpdating = False
-    Application.EnableEvents = False
-    Application.Calculation = xlCalculationManual
-
-  
-  ' Set Headers
-  Range("A1").Value = "Month"
-  Range("B1").Value = "Day"
-  Range("C1").Value = "Time"
-  Range("D1").Value = "Entrances"
-
-  ' Copy over data from other sheets
-  Set wbDst = ThisWorkbook
-  myPath = ActiveWorkbook.Path & "\"
-  myExtension = "*.xls*"
-  myFile = Dir(myPath & myExtension)
-  myFile = Dir
-
-  Do While myFile <> ""
-    Set wbSrc = Workbooks.Open(Filename:=myPath & myFile)
-
-    DoEvents
-
-    Set wsSrc = wbSrc.Worksheets(1)
-    wsSrc.Range("A1", Range("D" & Rows.Count).End(xlUp)).Copy
-    wbDst.Sheets(1).Cells(Rows.Count, 1).End(xlUp).Offset(1, 0).PasteSpecial xlPasteValues
-    Application.CutCopyMode = False
-    ' wbDst.Sheets(1).Range("A" & Rows.Count).End(xlUp).PasteSpecial xlValues
-    ' wbDst.Sheets(1).Range("A" & Rows.Count).End(xlUp).Row.Paste
-    ' wsSrc.Copy After:=wbDst.Worksheets(1)
-    wbSrc.Close False
-    
-    myFile = Dir
-  Loop
-End Sub
-
-Sub main()
-  ' Make sure you create a new spreadsheet first, then run this macro from within that new spreadsheet
-  Call FormatAllFiles
-  Call ConsolidateData
-  Call SaveAsCSV
-  ActiveWorkbook.Save
-  'Message Box when tasks are completed
-  MsgBox "Task Complete!"
-End Sub
-
 Sub FormatAllFiles()
   Dim wb As Workbook
   Dim myPath As String
   Dim myFile As String
   Dim myExtension As String
-
-  'Optimize Macro Speed
-    Application.ScreenUpdating = False
-    Application.EnableEvents = False
-    Application.Calculation = xlCalculationManual
 
 NextCode:
     myPath = ActiveWorkbook.Path & "\"
@@ -98,8 +22,8 @@ NextCode:
       'Ensure Workbook has opened before moving on to next line of code
         DoEvents
 
-      'CODE GOES HERE
-        Call Test1
+        Call FormatFile
+        
       'Save and Close Workbook
         ActiveWorkbook.Save
         wb.Close
@@ -110,49 +34,40 @@ NextCode:
       'Get next file name
         myFile = Dir
     Loop
-
-ResetSettings:
-    'Reset Macro Optimization Settings
-      Application.EnableEvents = True
-      Application.Calculation = xlCalculationAutomatic
-      Application.ScreenUpdating = True
-
 End Sub
 
-Sub Test1()
+Sub FormatFile()
       Dim x As Integer
+      Dim NumRows As Integer
       Dim colDay As String
       Dim colMon As String
-      Application.ScreenUpdating = False
+
       Range("A1").Select
-      If InStr(1, ActiveCell.Value, "Entrance/Exit") > 0 Then
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-          Rows(ActiveCell.Row).Delete
-      End If
+
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      Rows(ActiveCell.Row).Delete
+      
       Range("A1", Range("E1").End(xlDown)).UnMerge
+
       Columns(5).EntireColumn.Delete
       Columns(4).EntireColumn.Delete
       Columns(2).EntireColumn.Delete
       Range("A1").EntireColumn.Insert
       Range("A1").EntireColumn.Insert
+
       Rows(Range("A1").Row).Delete
-      ' Range("A1").Value = "Month"
-      ' Range("B1").Value = "Day"
-      ' Range("C1").ClearFormats
-      ' Range("C1").Value = "Time"
-      ' Range("D1").ClearFormats
-      ' Range("D1").Value = "Entrances"
 
       ' Set numrows = number of rows of data.
       NumRows = Range("C1", Range("C1").End(xlDown)).Rows.Count
-      ' Select cell a1.
+
       Range("C1").Select
+
       ' Establish "For" loop to loop "numrows" number of times.
       For x = 1 To NumRows
           If InStr(1, Format(ActiveCell.Value, "dddd"), "Mon") > 0 Then
@@ -243,13 +158,81 @@ Sub Test1()
           Else
               ActiveCell.Offset(0, -1).Value = colDay
               ActiveCell.Offset(0, -2).Value = colMon
-              ' Selects cell down 1 row from active cell.
               ActiveCell.Offset(1, 0).Select
           End If
       Next
-      Application.ScreenUpdating = True
 End Sub
 
+Sub ConsolidateData()
+  Dim wbSrc As Workbook
+  Dim wsSrc As Worksheet
+  Dim wbDst As Workbook
+  Dim myPath As String
+  Dim myFile As String
+  Dim myExtension As String
+  
+  ' Set Headers
+  Range("A1").Value = "Month"
+  Range("B1").Value = "Day"
+  Range("C1").Value = "Time"
+  Range("D1").Value = "Entrances"
 
+  ' Copy over data from other sheets
+  Set wbDst = ThisWorkbook
+  myPath = ActiveWorkbook.Path & "\"
+  myExtension = "*.xls*"
+  myFile = Dir(myPath & myExtension)
+  myFile = Dir
 
+  Do While myFile <> ""
+    Set wbSrc = Workbooks.Open(Filename:=myPath & myFile)
 
+    DoEvents
+
+    Set wsSrc = wbSrc.Worksheets(1)
+    wsSrc.Range("A1", Range("D" & Rows.Count).End(xlUp)).Copy
+    wbDst.Sheets(1).Cells(Rows.Count, 1).End(xlUp).Offset(1, 0).PasteSpecial xlPasteValues
+    
+    Application.CutCopyMode = False
+    wbSrc.Close False
+    
+    myFile = Dir
+  Loop
+End Sub
+
+Sub SaveAsCSV()
+  Dim parts As Variant
+  parts = Split(ActiveWorkbook.Name, ".")
+  parts(UBound(parts)) = "csv"
+
+  ActiveWorkbook.SaveAs Filename:=ActiveWorkbook.Path & "\" & _
+    Join(parts, "."), FileFormat:=xlCSV, CreateBackup:=False
+End Sub
+
+Function IsWorkBookOpen(Name As String) As Boolean
+  Dim xWb As Workbook
+  On Error Resume Next
+  Set xWb = Application.Workbooks.Item(Name)
+  IsWorkBookOpen = (Not xWb Is Nothing)
+End Function
+
+Sub main()
+  'Optimize Macro Speed
+  Application.ScreenUpdating = False
+  Application.EnableEvents = False
+  Application.Calculation = xlCalculationManual
+
+  Call FormatAllFiles
+  Call ConsolidateData
+
+  'Reset Macro Optimization Settings
+  Application.ScreenUpdating = True
+  Application.EnableEvents = True
+  Application.Calculation = xlCalculationAutomatic
+
+  Call SaveAsCSV
+  ActiveWorkbook.Save
+
+  'Message Box when tasks are completed
+  MsgBox "Task Complete!"
+End Sub
