@@ -20,6 +20,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
+import weka.core.converters.CSVLoader;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.rules.DecisionTable;
@@ -49,6 +51,10 @@ public class EntryLookupEngine {
 	********************************************************************/
 	@Autowired
 	public EntryLookupEngine() throws Exception {
+		// Convert the CSV file to ARFF format
+		CSV_to_ARFF("data/All_training_data.csv", "data/training_data.arff");
+		
+		// Insert training data
 		train = createInstance("data/training_data.arff");
 	}
 	
@@ -247,6 +253,20 @@ public class EntryLookupEngine {
 	        is.close();
 	        os.close();
 	    }
+	}
+	
+	private static void CSV_to_ARFF(String src, String dest) throws IOException{
+		CSVLoader loader = new CSVLoader();
+		
+		// Load CSV
+		loader.setSource(new File(src));
+		Instances data = loader.getDataSet();
+		
+		// Save ARFF
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(data);
+		saver.setFile(new File(dest));
+		saver.writeBatch();
 	}
 	
 	
