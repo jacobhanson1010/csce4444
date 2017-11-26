@@ -1,10 +1,7 @@
 package csce4444;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -38,26 +35,18 @@ public class SwolePatrol {
 	// These are the request mappings for handling web requests.
 
 	@RequestMapping("/")
-	public String index(Map<String, Object> model) throws IOException {
-		// NEED TO MAKE A TEST FILE IN ARFF BASED ON CURRENT DATE
-		// THEN EVALUATE MODEL ON TEST FILE
-		// THEN RETURN PREDICTION TO HTML RESPONSE
-		// GET CURRENT TIME
+	public String index(Map<String, Object> model) throws Exception {
+		int entrances;
 		
 		Date now = new Date();
 		
 		entryLookupEngine.createTestFile(now);
-		//try {
-		//Double entriesForDate = entryLookupEngine.get(now);
-			//model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
-		//} catch (NoSuchElementException e) {
-//			model.put("entries", "Sorry, no data is available for this time.");
-		//}
 		
+		entrances = entryLookupEngine.evaluateModel();
 		
-		//model.put("time", now.toString());
+		model.put("entries", entrances);		
+		model.put("time", now.toString());
 		
 		return "index"; // this is the name of the html file to return
 	}
-
 }
