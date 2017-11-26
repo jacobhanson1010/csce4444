@@ -18,6 +18,8 @@ This is the directory structure for our repository:
 
 ## Instructions
 
+### NOTE: If you already have the converted csv data, skip to Step 9
+
 1. Make sure you have Java downloaded and installed
 2. Make sure you have Eclipse downloaded and installed 
     * Java and Eclipse architectures need to match, 32-bit and 32-bit, or 64-bit and 64-bit
