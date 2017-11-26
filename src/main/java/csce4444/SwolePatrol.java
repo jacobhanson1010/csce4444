@@ -47,8 +47,6 @@ public class SwolePatrol {
 		Date now = new Date();
 		
 		entryLookupEngine.createTestFile(now);
-		System.out.println("now= " + now);
-		
 		//try {
 		//Double entriesForDate = entryLookupEngine.get(now);
 			//model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
