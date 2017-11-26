@@ -49,7 +49,7 @@ public class EntryLookupEngine {
 	********************************************************************/
 	@Autowired
 	public EntryLookupEngine() throws Exception {
-		train = createInstance("data/Alldata_converted.arff");
+		train = createInstance("data/training_data.arff");
 	}
 	
 	/******************************************************************* 
@@ -63,7 +63,7 @@ public class EntryLookupEngine {
 		
 		Classifier model = new DecisionTable();
 		
-		test = createInstance("data/test.arff");
+		test = createInstance("data/test_data.arff");
 		
 		// Build classifier on the training data and evaluate the test data
 		classify(model);
@@ -120,7 +120,7 @@ public class EntryLookupEngine {
 		
 		String outputString;
 		String templateFile = "data/template.arff";
-		String outputFile = "data/test.arff";
+		String outputFile = "data/test_data.arff";
 		
 		File source = new File(templateFile);
 		File destination = new File(outputFile);
