@@ -33,6 +33,9 @@ This is the directory structure for our repository:
 8. Close out of Excel
     * Press "Don't Save" in the dialog
 9. Open project in Eclipse
+    * You may have to point your project to your JRE
+    * Right-click package -> properties -> Java Build Path, check JRE System Library, Apply & Close
 10. Run project "as Java Application"
     * This starts the server
+    * Select "SwolePatrol - csce4444" when prompted
 11. Test by visiting localhost:8080 in a web browser
