@@ -255,6 +255,13 @@ public class EntryLookupEngine {
 	    }
 	}
 	
+	
+	/******************************************************************* 
+	* Function     : CSV_to_ARFF		                               *
+	* Parameter(s) : Source file and destination file		           *
+	* Return-Value : N/A									           *
+	* Description  : Helper method that converts a CSV to an ARFF      *
+	********************************************************************/
 	private static void CSV_to_ARFF(String src, String dest) throws IOException{
 		CSVLoader loader = new CSVLoader();
 		
