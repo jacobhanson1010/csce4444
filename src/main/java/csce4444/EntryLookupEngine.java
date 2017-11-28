@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.EvaluationException;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -40,10 +41,10 @@ public class EntryLookupEngine {
 	/**
 	 * This constructor is automatically called when the application starts up.
 	 * It's job is to initialize the model with the provided training data. 
-	 * @throws Exception 
+	 * @throws IOException
 	 */
 	@Autowired
-	public EntryLookupEngine() throws Exception {
+	public EntryLookupEngine() throws IOException {
 		// Convert the CSV file to ARFF format
 		CSV_to_ARFF("data/All_training_data.csv", "data/training_data.arff");
 		
@@ -54,9 +55,9 @@ public class EntryLookupEngine {
 	/**
 	 * Tests classifier on test data, returns prediction
 	 * @return Number of entrances predicted by model
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public int testModel() throws Exception {
+	public int testModel() throws IOException {
 		int entrances;
 		
 		Classifier model = new DecisionTable();
@@ -76,13 +77,17 @@ public class EntryLookupEngine {
 	 * Gets prediction value from model.
 	 * @param model Classifier used on training set, testing set inst
 	 * @return int Number of entrances in the past 15 minutes
-	 * @throws Exception
+	 * @throws EvaluationException
 	 */
-	private int getResult(Classifier model) throws Exception {
+	private int getResult(Classifier model) throws EvaluationException {
 		double[] prediction = new double[test.numInstances()];
 
 		// Get prediction info for instance 0 of the test set
-		prediction = model.distributionForInstance(test.get(0));
+		try {
+			prediction = model.distributionForInstance(test.get(0));
+		} catch (Exception e) {
+			throw new EvaluationException(e.getMessage());
+		}
 		
 		// Round up to the nearest integer since people aren't fractional...on the outside
 		prediction[0] = Math.ceil(prediction[0]);
@@ -93,14 +98,18 @@ public class EntryLookupEngine {
 	/**
 	 * Builds the classifier on the training data and predicts desired values on test data.
 	 * @param model Classifier to be used on training set
-	 * @throws Exception
+	 * @throws EvaluationException
 	 */
-	private void classify(Classifier model) throws Exception {
-		
-		Evaluation evaluation = new Evaluation(train);
-		
-		model.buildClassifier(train);
-		evaluation.evaluateModel(model, test);
+	private void classify(Classifier model) throws EvaluationException {
+		// BAD WEKA, BAD
+		Evaluation evaluation;
+		try {
+			evaluation = new Evaluation(train);
+			model.buildClassifier(train);
+			evaluation.evaluateModel(model, test);
+		} catch (Exception e) {
+			throw new EvaluationException(e.getMessage());
+		}
 	}
 	
 	
@@ -143,7 +152,7 @@ public class EntryLookupEngine {
 	 * @param date object used to format test file
 	 * @return String containing formatted date for arff file
 	 */
-	private String formatOutputString(Date date) {
+	public String formatOutputString(Date date) {
 		
 		int mod, numMinutes;
 		Date beginDate, endDate;
@@ -243,7 +252,7 @@ public class EntryLookupEngine {
 	 * @param dest destination file
 	 * @throws IOException
 	 */
-	private static void CSV_to_ARFF(String src, String dest) throws IOException{
+	private void CSV_to_ARFF(String src, String dest) throws IOException{
 		CSVLoader loader = new CSVLoader();
 		
 		// Load CSV
@@ -279,7 +288,7 @@ public class EntryLookupEngine {
 	 * @param date Date object to parse month from
 	 * @return String containing month in "MMM" format
 	 */
-	private String getMonthFromDate(Date date) {
+	public String getMonthFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("MMM");
 		return format.format(date);
 	}
@@ -289,7 +298,7 @@ public class EntryLookupEngine {
 	 * @param date Date object to parse day from
 	 * @return String containing day in "EEEE" format
 	 */
-	private String getDayOfWeekFromDate(Date date) {
+	public String getDayOfWeekFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("EEEE");
 		return format.format(date);
 	}
@@ -299,7 +308,7 @@ public class EntryLookupEngine {
 	 * @param date Date object to parse hour from
 	 * @return String containing hour in "hh" format
 	 */
-	private String getHourFromDate(Date date) {
+	public String getHourFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("hh");
 		return format.format(date);
 	}
@@ -309,7 +318,7 @@ public class EntryLookupEngine {
 	 * @param date Date object to parse minutes from
 	 * @return String containing minutes in "mm" format
 	 */
-	private String getMinutesFromDate(Date date) {
+	public String getMinutesFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("mm");
 		return format.format(date);
 	}
@@ -319,7 +328,7 @@ public class EntryLookupEngine {
 	 * @param date Date object to parse meridiem(AM/PM) from
 	 * @return String containing meridiem in "aa" format
 	 */
-	private String getMeridiemFromDate(Date date) {
+	public String getMeridiemFromDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("aa");
 		return format.format(date);
 	}

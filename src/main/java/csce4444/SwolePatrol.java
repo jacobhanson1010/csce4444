@@ -34,7 +34,7 @@ public class SwolePatrol {
 	}
 
 	@RequestMapping("/")
-	public String index(Map<String, Object> model) throws Exception {
+	public String index(Map<String, Object> model) throws IOException {
 		int entrances;
 		
 		Date now = new Date();
