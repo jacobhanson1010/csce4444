@@ -1,9 +1,8 @@
 package csce4444;
 
-import java.text.DecimalFormat;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -19,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SwolePatrol {
 
 	// These are the components necessary for the application to function
-
 	@Autowired
 	private EntryLookupEngine entryLookupEngine;
 
+	public SwolePatrol() throws IOException {
+		entryLookupEngine = new EntryLookupEngine();
+	}
+	
 	/**
 	 * This method is what runs when the application starts. Its purpose is to run
 	 * this class as a spring application.
@@ -34,27 +36,25 @@ public class SwolePatrol {
 		SpringApplication.run(SwolePatrol.class, args);
 	}
 
-	// These are the request mappings for handling web requests.
-
 	@RequestMapping("/")
-	public String index(Map<String, Object> model) {
-		
-		// GET CURRENT TIME
+	public String index(Map<String, Object> model) throws IOException {
+		int entrances;
 		
 		Date now = new Date();
 		
-		try {
-			Double entriesForDate = entryLookupEngine.get(now);
-			model.put("entries", "" + (new DecimalFormat(".00")).format(entriesForDate) /*entriesForDate*/);
-		} catch (NoSuchElementException e) {
-			model.put("entries", "Sorry, no data is available for this time.");
-		}
+		entryLookupEngine.createTestFile(now);
 		
-		///////////////////////////////////////////////////////////////
+		try {
+			entrances = entryLookupEngine.testModel();
+			model.put("entries", entrances);		
+		} 
+		catch (IOException e) {
+			System.err.println("IOException" + e.getMessage());
+			model.put("entries", "Sorry, no data is available for this time period.");
+		}	
 		
 		model.put("time", now.toString());
 		
-		return "index"; // this is the name of the html file to return
+		return "index";
 	}
-
 }
