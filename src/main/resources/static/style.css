@@ -1,5 +1,11 @@
-div {
-	
+html {
+	height: 100%;
+	margin-top: 0px;
+	padding-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+ 	min-height: 100%;
 }
 
 h1.header {
@@ -50,7 +56,7 @@ p.result {
 body {
 	background-color: black;
 	background-size: cover;
-	background-repeat: repeat;
+	background-repeat: no-repeat;
 	background-image:
 		url("UNT_GIF.gif");
 }
