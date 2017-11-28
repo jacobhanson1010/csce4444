@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SwolePatrol {
 
 	// These are the components necessary for the application to function
-
 	@Autowired
 	private EntryLookupEngine entryLookupEngine;
 
+	public SwolePatrol() throws IOException {
+		entryLookupEngine = new EntryLookupEngine();
+	}
+	
 	/**
 	 * This method is what runs when the application starts. Its purpose is to run
 	 * this class as a spring application.

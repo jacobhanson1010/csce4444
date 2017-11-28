@@ -15,7 +15,7 @@ public class TestSwolePatrol {
 	private static SwolePatrol swolePatrol;
 	
 	@BeforeClass
-	public static void initEntryLookupengine() {
+	public static void initEntryLookupengine() throws IOException {
 		swolePatrol = new SwolePatrol();
 	}
 	
