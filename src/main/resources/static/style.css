@@ -50,9 +50,9 @@ p.result {
 body {
 	background-color: black;
 	background-size: cover;
-	background-repeat: no-repeat;
+	background-repeat: repeat;
 	background-image:
-		url("http://www.meangreenmap.com/images/weightroom/weightroom1.jpg");
+		url("UNT_GIF.gif");
 }
 
 /* Style for displaying the current time */
