@@ -67,6 +67,7 @@ public class SwolePatrol {
 			model.addAttribute("entries", entrances);
 			double percent = entrances / 42.0;
 			percent *= 100;
+			percent = percent > 100 ? 100 : percent;
 			model.addAttribute("percent", "width:" + percent + "%");
 		} 
 		catch (IOException e) {
