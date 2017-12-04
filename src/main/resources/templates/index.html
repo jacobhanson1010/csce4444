@@ -7,31 +7,27 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 	<body>
-		<h1 class="header">SwolePatrol</h1>
+		<div class="header"><h1>SwolePatrol</h1></div>
 		<!-- current time section-->
-		<h1 class="time">
-			<div>Current Time:</div>
-			<div2 th:text="${time}"></div2>
+		<div class="main">
+			<h1>For the time</h1>
+			<h2 th:text="${time}"></h2>
 	
-			<!-- NOTE: The command below this line will display time when JS is connected -->
-			<!-- <p class="marquee"><span id="dtText"></span></p> -->
-	
-	
-			<!-- NOTE: The two lines of code below this line will go into JS to pull the current time -->
-			<!-- var today = new Date(); -->
-			<!-- document.getElementById('dtText').innerHTML=today; -->
-		</h1>
-	
-	
-	
-		<!-- display data section -->
-		<p class="result">
-	
-			<div3>Predicted number of gym members entered in the last 15
-			minutes:</div3>
-			<div2 th:text="${entries}"></div2>
-	
-		</p>
+			<div3>the predicted number of gym members entered in the last 15 minutes is </div3>
+			<h2 th:text="${entries}"></h2>
+			
+			<div id="progressbar">
+     			<div id="progress" th:style="${percent}"></div>
+    		</div>
+		</div>
+		
+		<div class="result">
+			Choose a date and time for prediction
+				<form action="#" th:action="@{/acceptDateTime}" th:object="${dateContainer}" method="post">
+			        <input type="datetime-local" th:field="*{dateTime}"/>
+			        <input type="submit" value="Submit"/>
+			    </form>
+		</div>
 	
 	</body>
 </html>

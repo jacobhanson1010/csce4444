@@ -1,14 +1,23 @@
 package csce4444;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.springframework.aop.interceptor.PerformanceMonitorInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import weka.core.neighboursearch.balltrees.MedianOfWidestDimension;
 
 // This class acts as the main web controller. When a web request comes in, it is handled by the appropriate
 // RequestMapping method. Starts on port 8080 by default.
@@ -16,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @SpringBootApplication
 public class SwolePatrol {
-
+	Logger logger = Logger.getLogger(this.getClass());
+	
 	// These are the components necessary for the application to function
 	@Autowired
 	private EntryLookupEngine entryLookupEngine;
@@ -36,25 +46,43 @@ public class SwolePatrol {
 		SpringApplication.run(SwolePatrol.class, args);
 	}
 
+	private boolean customDate = false;
+	private Date date;
+	
 	@RequestMapping("/")
-	public String index(Map<String, Object> model) throws IOException {
+	public String index(Model model) throws IOException {
 		int entrances;
 		
-		Date now = new Date();
-		
-		entryLookupEngine.createTestFile(now);
+		if (customDate == false) {
+			date = new Date();
+			entryLookupEngine.createTestFile(date);
+		}
+		if (customDate == true) {
+			entryLookupEngine.createTestFile(date);
+			customDate = false;
+		}
 		
 		try {
 			entrances = entryLookupEngine.testModel();
-			model.put("entries", entrances);		
+			model.addAttribute("entries", entrances);
+			double percent = entrances / 42.0;
+			percent *= 100;
+			model.addAttribute("percent", "width:" + percent + "%");
 		} 
 		catch (IOException e) {
 			System.err.println("IOException" + e.getMessage());
-			model.put("entries", "Sorry, no data is available for this time period.");
+			model.addAttribute("entries", "none");
 		}	
 		
-		model.put("time", now.toString());
-		
+		model.addAttribute("time", date.toString());
+		model.addAttribute("dateContainer", new DateContainer());
 		return "index";
+	}
+	
+	@PostMapping("/acceptDateTime")
+	public String acceptDateTime(@ModelAttribute DateContainer dc) {
+		date = Date.from(dc.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
+		customDate = true;
+		return "redirect:/";
 	}
 }

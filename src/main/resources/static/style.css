@@ -2,7 +2,7 @@ html {
 	height: 100%;
 }
 
-h1.header {
+div.header {
 	font-family: Verdana;
 	color: white;
 	vertical-align: middle;
@@ -15,10 +15,10 @@ h1.header {
 }
 
 /* format setting for h1 (which is time) */
-h1.time {
+div.main {
 	color: black;
 	text-align: center;
-	font-style: verdana;
+	font-family: verdana;
 	background-color: lightgrey;
 	width: 60%;
 	max-width: 460px;
@@ -28,13 +28,13 @@ h1.time {
 }
 
 /* temp div to hold where dynamic data will be --> */
-div2 {
-	color: red;
+h2 {
+	color: ORANGERED;
 }
 
 /*format settings for displaying number of gym goers */
-p.result {
-	font-style: verdana;
+div.result {
+	font-family: verdana;
 	text-align: center;
 	background-color: lightgrey;
 	width: 60%;
@@ -51,8 +51,7 @@ body {
 	background-color: black;
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-image:
-		url("UNT_GIF.gif");
+	background-image: url("UNT_GIF.gif");
 }
 
 /* Style for displaying the current time */
@@ -66,4 +65,18 @@ body {
 	overflow: hidden;
 	color: blue;
 	font-size: 18px;
+}
+
+div#progressbar {
+	text-align: left;
+	background-color: black;
+	border-radius: 13px; /* (height of inner div) / 2 + padding */
+	padding: 3px;
+}
+
+div#progress {
+	text-align: left;
+	background-color: orange;
+	height: 20px;
+	border-radius: 10px;
 }
