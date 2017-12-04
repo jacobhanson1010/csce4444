@@ -3,10 +3,10 @@ package csce4444;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.ui.ExtendedModelMap;
 
 public class TestSwolePatrol {
 	
@@ -21,7 +21,7 @@ public class TestSwolePatrol {
 	
 	@Test
 	public void testIndex() throws IOException {
-		String result = swolePatrol.index(new HashMap<String, Object>());
+		String result = swolePatrol.index(new ExtendedModelMap());
 		assertEquals("index", result);
 	}
 	
