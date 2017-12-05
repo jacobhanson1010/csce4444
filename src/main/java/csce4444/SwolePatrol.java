@@ -1,13 +1,9 @@
 package csce4444;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.springframework.aop.interceptor.PerformanceMonitorInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import weka.core.neighboursearch.balltrees.MedianOfWidestDimension;
 
 // This class acts as the main web controller. When a web request comes in, it is handled by the appropriate
 // RequestMapping method. Starts on port 8080 by default.
@@ -82,8 +76,12 @@ public class SwolePatrol {
 	
 	@PostMapping("/acceptDateTime")
 	public String acceptDateTime(@ModelAttribute DateContainer dc) {
-		date = Date.from(dc.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
-		customDate = true;
-		return "redirect:/";
+		try {
+			date = Date.from(dc.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
+			customDate = true;
+			return "redirect:/";
+		} catch (NullPointerException e) {
+			return "redirect:/";
+		}
 	}
 }
