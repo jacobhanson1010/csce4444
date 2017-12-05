@@ -8,7 +8,9 @@ div.header {
 	vertical-align: middle;
 	background-color: black;
 	background-size: cover;
-	width: 100%;
+	width: 60%;
+	max-width: 520px;
+	margin: 25px auto;
 	height: 75px;
 	line-height: 75px;
 	text-align: center;
@@ -22,7 +24,7 @@ div.main {
 	background-color: lightgrey;
 	width: 60%;
 	max-width: 460px;
-	border: 15px solid black;
+	border: 7px solid black;
 	padding: 25px;
 	margin: 25px auto;
 }
@@ -39,7 +41,7 @@ div.result {
 	background-color: lightgrey;
 	width: 60%;
 	max-width: 460px;
-	border: 10px solid black;
+	border: 7px solid black;
 	padding: 25px;
 	margin: 25px auto;
 	font-weight: bold;
