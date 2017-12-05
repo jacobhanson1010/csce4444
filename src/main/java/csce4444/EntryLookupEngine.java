@@ -186,7 +186,14 @@ public class EntryLookupEngine {
 		// Edge Case: 10:45-10:59PM, we need that 10:59, not 11:00
 		if(Integer.parseInt(endMinutes) == 0) {
 			endMinutes = String.valueOf(59);
-			endHour = String.valueOf(Integer.parseInt(endHour) - 1);
+			
+			// Add leading '0' after rounding down if needed
+			if(Integer.parseInt(endHour) <= 10) {
+				endHour = "0" + String.valueOf(Integer.parseInt(endHour) - 1);
+			}
+			else{
+				endHour = String.valueOf(Integer.parseInt(endHour) - 1);
+			}
 		}
 		
 		// Populate strings for formatting
