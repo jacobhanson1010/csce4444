@@ -59,7 +59,7 @@ public class SwolePatrol {
 		try {
 			entrances = entryLookupEngine.testModel();
 			model.addAttribute("entries", entrances);
-			double percent = entrances / 42.0;
+			double percent = entrances / 44.0;
 			percent *= 100;
 			percent = percent > 100 ? 100 : percent;
 			model.addAttribute("percent", "width:" + percent + "%");

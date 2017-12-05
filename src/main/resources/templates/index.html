@@ -10,11 +10,12 @@
 		<div class="header"><h1>SwolePatrol</h1></div>
 		<!-- current time section-->
 		<div class="main">
-			<h1>For the time</h1>
+			<h1>For the time:</h1>
 			<h2 th:text="${time}"></h2>
 	
-			<div3>the predicted number of gym members entered in the last 15 minutes is </div3>
+			<div3>The predicted number of gym members entered in the last 15 minutes is:</div3>
 			<h2 th:text="${entries}"></h2>
+			<div4>Estimated Capacity</div4>
 			
 			<div id="progressbar">
      			<div id="progress" th:style="${percent}"></div>
